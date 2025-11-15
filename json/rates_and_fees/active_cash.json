@@ -1,0 +1,77 @@
+{
+  "productInfo": {
+    "primaryTitle": "Wells Fargo Active Cash Visa® Card Terms and Conditions",
+    "description": "Thank you for your interest in opening a Wells Fargo Active Cash Account.",
+    "introBonusEligibility": "You may not be eligible for introductory annual percentage rates, fees and/or rewards bonus offers if you have the Wells Fargo Active Cash Visa® or opened one within the last 48 months from the date of this application - even if that account is closed and has a $0 balance."
+  },
+  "title": "IMPORTANT DISCLOSURES",
+  "interestRatesAndInterestCharges": {
+    "sectionTitle": "Interest Rates and Interest Charges",
+    "aprForPurchases": {
+      "label": "Annual Percentage Rate (APR) for Purchases",
+      "introApr": {
+        "rate": "0%",
+        "duration": "Introductory APR for 12 months from date of account opening."
+      },
+      "postIntroApr": "18.74%, 24.74%, or 28.74%",
+      "basedOn": "Based on your creditworthiness.",
+      "variableInfo": "This APR will vary with the market based on the U.S. Prime Rate."
+    },
+    "aprForBalanceTransfers": {
+      "label": "Annual Percentage Rate (APR) for Balance Transfers",
+      "introApr": {
+        "rate": "0%",
+        "duration": "Introductory APR for 12 months from date of account opening."
+      },
+      "postIntroApr": "18.74%, 24.74%, or 28.74%",
+      "basedOn": "Based on your creditworthiness. A balance transfer request must be made within 120 days from account opening to qualify for the introductory APR. Balance Transfers are subject to eligibility.",
+      "variableInfo": "This APR will vary with the market based on the U.S. Prime Rate."
+    },
+    "aprForCashAdvancesAndOverdraftProtection": {
+      "label": "APR for Cash Advances and Overdraft Protection Advances",
+      "rate": "29.74%",
+      "variableInfo": "This APR will vary with the market based on the U.S. Prime Rate."
+    },
+    "howToAvoidPayingInterestOnPurchases": {
+      "label": "How to Avoid Paying Interest on Purchases",
+      "details": "Your due date is at least 25 days after the close of each billing period. We will not charge you interest on purchases if you pay your entire balance by the due date each month."
+    },
+    "minimumInterestCharge": {
+      "label": "Minimum Interest Charge",
+      "details": "If you are charged interest, the charge will be no less than $1.00."
+    },
+    "cfpbTips": {
+      "label": "For Credit Card Tips from the Consumer Financial Protection Bureau",
+      "details": "To learn more about factors to consider when applying for or using a credit card, visit the website of the Consumer Financial Protection Bureau at https://www.consumerfinance.gov/learnmore.*"
+    }
+  },
+  "fees": {
+    "sectionTitle": "Fees",
+    "annualFee": {
+      "label": "Annual Fee",
+      "details": "None"
+    },
+    "transactionFees": {
+      "label": "Transaction Fees",
+      "balanceTransfers": {
+        "label": "Balance Transfers",
+        "details": "Introductory fee of either $5 or 3% of the amount of each balance transfer, whichever is greater, for 120 days from account opening. After that, up to 5% for each balance transfer, with a minimum of $5."
+      },
+      "cashAdvances": {
+        "label": "Cash Advances",
+        "details": "Either $10 or 5% of the amount of each advance, whichever is greater."
+      },
+      "foreignTransaction": {
+        "label": "Foreign Currency Conversion/Foreign Transaction",
+        "details": "3% of each transaction converted to U.S. dollars."
+      }
+    },
+    "penaltyFees": {
+      "label": "Penalty Fees",
+      "latePayment": {
+        "label": "Late Payment",
+        "details": "Up to $40"
+      }
+    }
+  }
+}

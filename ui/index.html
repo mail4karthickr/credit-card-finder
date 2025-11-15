@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Card Finder - Component Tester</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+        }
+        #app { max-width: 1400px; margin: 0 auto; }
+        .header {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .header h1 { margin: 0 0 10px 0; color: #1e3c72; font-size: 32px; }
+        .header p { margin: 0; color: #666; font-size: 16px; }
+        .controls {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .component-selector { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .component-btn {
+            padding: 12px 24px;
+            border: 2px solid #1e3c72;
+            border-radius: 8px;
+            background: white;
+            color: #1e3c72;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .component-btn:hover { background: #e8f0fe; }
+        .component-btn.active { background: #1e3c72; color: white; }
+        textarea {
+            width: 100%;
+            height: 200px;
+            padding: 12px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 13px;
+            border: 2px solid #1e3c72;
+            border-radius: 8px;
+            resize: vertical;
+            margin-bottom: 15px;
+        }
+        .action-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        .btn-primary { background: #1e3c72; color: white; }
+        .btn-primary:hover {
+            background: #152d5a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(30, 60, 114, 0.4);
+        }
+        .btn-secondary { background: #6c757d; color: white; }
+        .btn-secondary:hover { background: #5a6268; }
+        .btn-danger { background: #dc3545; color: white; }
+        .btn-danger:hover { background: #c82333; }
+        .status {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            display: none;
+        }
+        .status.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .status.error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .status.info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        .widget-container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            min-height: 400px;
+        }
+        h3 { margin-top: 0; color: #333; font-size: 18px; }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="header">
+            <h1>💳 Credit Card Finder - Component Tester</h1>
+            <p>Test and preview UI components with custom JSON data</p>
+        </div>
+        
+        <div class="controls">
+            <h3>Select Component</h3>
+            <div class="component-selector">
+                <button class="component-btn active" onclick="selectComponent('card-list')">💳 Card List</button>
+                <button class="component-btn" onclick="selectComponent('card-compare')">⚖️ Card Comparison</button>
+            </div>
+            <h3>JSON Input</h3>
+            <textarea id="json-input" placeholder="Paste JSON data here..."></textarea>
+            
+            <div class="action-buttons">
+                <button onclick="loadData()" class="btn-primary">▶️ Load & Render</button>
+                <button onclick="clearData()" class="btn-danger">🗑️ Clear</button>
+                <button onclick="formatJSON()" class="btn-secondary">✨ Format JSON</button>
+            </div>
+            <div id="status" class="status"></div>
+        </div>
+        
+        <div class="widget-container">
+            <div id="card-list-root"></div>
+            <div id="card-compare-root"></div>
+        </div>
+    </div>
+    
+    <script>
+        let currentComponent = 'card-list';
+        let loadedScripts = {};
+
+        async function loadDefaultDataForComponent(component) {
+            try {
+                const mockFile = component === 'card-compare' ? 'compare-cards.json' : 'cards.json';
+                const response = await fetch(`./mock-data/${mockFile}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('json-input').value = JSON.stringify(data, null, 2);
+                    console.log(`✅ Loaded mock data for ${component}`);
+                }
+            } catch (error) {
+                console.log('ℹ️ Could not load mock data');
+            }
+        }
+
+        if (!window.openai) { window.openai = {}; }
+
+        function selectComponent(component) {
+            currentComponent = component;
+            
+            // Update button states
+            document.querySelectorAll('.component-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Hide all root elements
+            document.getElementById('card-list-root').style.display = 'none';
+            document.getElementById('card-compare-root').style.display = 'none';
+            
+            // Show selected root element
+            const rootId = component + '-root';
+            document.getElementById(rootId).style.display = 'block';
+            
+            // Clear previous data
+            document.getElementById('card-list-root').innerHTML = '';
+            document.getElementById('card-compare-root').innerHTML = '';
+            
+            // Load mock data and component script
+            loadDefaultDataForComponent(component);
+            loadComponentScript();
+            
+            const componentName = component === 'card-list' ? 'Card List' : 'Card Comparison';
+            showStatus(`✅ Selected: ${componentName}`, 'info');
+        }
+
+        function loadComponentScript() {
+            if (loadedScripts[currentComponent]) {
+                if (window.openai.toolOutput) {
+                    window.dispatchEvent(new CustomEvent('openai:set_globals', {
+                        detail: { globals: { toolOutput: window.openai.toolOutput } }
+                    }));
+                }
+                return;
+            }
+            
+            const scriptFile = currentComponent === 'card-compare' ? 'card-compare.js' : 'card-list.js';
+            const script = document.createElement('script');
+            script.type = 'module';
+            script.src = `./dist/${scriptFile}?t=${Date.now()}`;
+            script.onerror = () => showStatus('❌ Build not found. Run: npm run build', 'error');
+            script.onload = () => {
+                console.log(`✅ Loaded ${scriptFile}`);
+                loadedScripts[currentComponent] = true;
+            };
+            document.body.appendChild(script);
+        }
+
+        function showStatus(message, type) {
+            const status = document.getElementById('status');
+            status.style.display = 'block';
+            status.textContent = message;
+            status.className = `status ${type}`;
+            if (type === 'success' || type === 'info') {
+                setTimeout(() => status.style.display = 'none', 5000);
+            }
+        }
+
+        function loadData() {
+            const input = document.getElementById('json-input').value.trim();
+            if (!input) {
+                showStatus('❌ Please paste JSON data first', 'error');
+                return;
+            }
+            try {
+                const data = JSON.parse(input);
+                window.openai.toolOutput = data;
+                window.dispatchEvent(new CustomEvent('openai:set_globals', {
+                    detail: { globals: { toolOutput: data } }
+                }));
+                showStatus('✅ Data loaded successfully!', 'success');
+            } catch (error) {
+                showStatus('❌ Invalid JSON: ' + error.message, 'error');
+            }
+        }
+
+        function clearData() {
+            window.openai.toolOutput = null;
+            window.dispatchEvent(new CustomEvent('openai:set_globals', {
+                detail: { globals: { toolOutput: null } }
+            }));
+            document.getElementById('card-list-root').innerHTML = '';
+            document.getElementById('card-compare-root').innerHTML = '';
+            document.getElementById('json-input').value = '';
+            showStatus('🔄 Data cleared', 'info');
+        }
+
+        function formatJSON() {
+            const input = document.getElementById('json-input').value.trim();
+            if (!input) {
+                showStatus('❌ No JSON to format', 'error');
+                return;
+            }
+            try {
+                const data = JSON.parse(input);
+                document.getElementById('json-input').value = JSON.stringify(data, null, 2);
+                showStatus('✨ JSON formatted successfully', 'success');
+            } catch (error) {
+                showStatus('❌ Cannot format invalid JSON', 'error');
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            console.log('🎯 Component Tester Ready');
+            // Hide card-compare-root by default
+            document.getElementById('card-compare-root').style.display = 'none';
+            loadDefaultDataForComponent(currentComponent);
+            loadComponentScript();
+        });
+    </script>
+    
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+</body>
+</html>

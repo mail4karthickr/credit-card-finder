@@ -1,0 +1,56 @@
+{
+  "cards": ["Active Cash", "Autograph", "Autograph Journey"],
+  "benefit_rows": [
+    {
+      "benefit_name": "Intro offer",
+      "card_values": {
+        "Active Cash": "$200 cash reward bonus when you spend $500 in purchases in the first 3 months",
+        "Autograph": "Earn 20,000 bonus points when you spend $1,000 in purchases in the first 3 months",
+        "Autograph Journey": "Earn 60,000 bonus points when you spend $4,000 in purchases in the first 3 months"
+      }
+    },
+    {
+      "benefit_name": "Annual fee",
+      "card_values": {
+        "Active Cash": "$0",
+        "Autograph": "$0",
+        "Autograph Journey": "$95"
+      }
+    },
+    {
+      "benefit_name": "Rewards rate",
+      "card_values": {
+        "Active Cash": "Earn unlimited 2% cash rewards on purchases",
+        "Autograph": "3X points on restaurants, travel, gas stations, transit, popular streaming services, and phone plans. 1X points on other purchases",
+        "Autograph Journey": "5X points on hotels, 4X points on airlines, 3X points on restaurants and other travel, 1X points on other purchases"
+      }
+    },
+    {
+      "benefit_name": "Intro APR",
+      "card_values": {
+        "Active Cash": "0% intro APR for 12 months from account opening on purchases and qualifying balance transfers. After that, variable APR of 18.74%, 24.74% or 28.74%",
+        "Autograph": "0% intro APR for 12 months from account opening on purchases and qualifying balance transfers. After that, variable APR of 20.24%, 25.24%, or 29.99%",
+        "Autograph Journey": "No intro APR offer - standard variable APR applies"
+      }
+    },
+    {
+      "benefit_name": "Best for",
+      "card_values": {
+        "Active Cash": "Simple cash back on all purchases without categories to track",
+        "Autograph": "Maximize rewards on everyday spending categories like dining, travel, and streaming",
+        "Autograph Journey": "Frequent travelers who want premium travel rewards and are willing to pay an annual fee"
+      }
+    },
+    {
+      "benefit_name": "Cell phone protection",
+      "card_values": {
+        "Active Cash": "Up to $600 protection against covered damage or theft (subject to $25 deductible)",
+        "Autograph": "Up to $600 protection against covered damage or theft (subject to $25 deductible)",
+        "Autograph Journey": "Up to $600 protection against covered damage or theft (subject to $25 deductible)"
+      }
+    }
+  ],
+  "recommended_card": {
+    "card_name": "Autograph"
+  }
+}
