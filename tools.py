@@ -39,26 +39,49 @@ def get_tool_definitions() -> List[types.Tool]:
                 description=widget.description,
                 inputSchema=input_schema,
                 _meta=meta,
+                annotations=types.ToolAnnotations(
+                    title=widget.title,
+                    readOnlyHint=True,  # Widget tools display data without modifying state
+                    destructiveHint=False,
+                    idempotentHint=True,  # Multiple calls with same args produce same result
+                    openWorldHint=False,  # Works with closed dataset of Wells Fargo cards
+                )
             )
         )
     
     # Add non-widget tools (data-fetching tools without UI)
     logger.info("🔧 Registering non-widget tools...")
     
-    # fetch_reward_benefits tool
+    # fetch_rewards_and_benefits tool
     tools.append(
         types.Tool(
-            name="fetch_reward_benefits",
+            name="fetch_rewards_and_benefits",
+            title="Fetch Wells Fargo Credit Card Rewards and Benefits",
             description=(
-                "Fetch detailed reward benefits, features, and terms for one or more Wells Fargo credit cards. "
-                "Returns comprehensive feature information including titles and detailed content for each benefit. "
-                "Use this when you need to get the complete feature and benefit terms for specific cards. "
-                "Accepts an array of card names. Each card name must be one of: Active Cash, Attune, Autograph, "
-                "Autograph Journey, Choice Privileges Mastercard, Choice Privileges Select Mastercard, "
-                "One Key Card, One Key+ Card, or Reflect. "
-                "Examples: ['Active Cash'], ['Autograph', 'Reflect'], or ['Active Cash', 'Autograph Journey', 'One Key+ Card']"
+                "**PURPOSE**\n"
+                "Retrieves detailed reward benefits, features, and terms for specified credit cards. "
+                "Returns comprehensive feature information including titles and detailed content for each benefit.\n"
+                "\n"
+                "**WHEN TO USE**\n"
+                "Call this tool when user asks to:\n"
+                "- Compare cards or compare specific cards by name\n"
+                "- Understand which card is better or what the differences are\n"
+                "- Get a suggestion or recommendation for a card\n"
+                "- See the best card or best option for their needs\n"
+                "- Choose between different card options\n"
+                "- Find the best card for a specific use case or spending pattern\n"
+                "This tool is the FIRST step before calling 'compare_cards'.\n"
+                "\n"
+                "**SEQUENCING REQUIREMENT**\n"
+                "- Must be called before using 'compare_cards'\n"
+                "- Always pair with 'fetch_rates_and_fees' before displaying comparison\n"
+                "- Do not skip this step when comparing or recommending cards\n"
+                "\n"
+                "**INPUT**: Array of card names. Each must be: Active Cash, Attune, Autograph, Autograph Journey, "
+                "Choice Privileges Mastercard, Choice Privileges Select Mastercard, One Key Card, One Key+ Card, or Reflect.\n"
+                "**EXAMPLES**: ['Active Cash'], ['Autograph', 'Reflect'], or ['Active Cash', 'Autograph Journey', 'One Key+ Card']"
             ),
-            inputSchema=schemas.get("fetch_reward_benefits", {
+            inputSchema=schemas.get("fetch_rewards_and_benefits", {
                 "type": "object",
                 "properties": {
                     "card_titles": {
@@ -69,33 +92,47 @@ def get_tool_definitions() -> List[types.Tool]:
                 },
                 "required": ["card_titles"]
             }),
+            annotations=types.ToolAnnotations(
+                title="Fetch Wells Fargo Credit Card Rewards and Benefits",
+                readOnlyHint=True,  # Only reads data, doesn't modify anything
+                destructiveHint=False,
+                idempotentHint=True,  # Same input always returns same result
+                openWorldHint=False,  # Works with closed dataset of Wells Fargo cards
+            )
         )
     )
-    logger.info("✅ Registered non-widget tool: fetch_reward_benefits")
+    logger.info("✅ Registered non-widget tool: fetch_rewards_and_benefits")
     
     # fetch_rates_and_fees tool
     tools.append(
         types.Tool(
             name="fetch_rates_and_fees",
+            title="Fetch Wells Fargo Credit Card Rates and Fees",
             description=(
-                "Fetch comprehensive rates and fees information for one or more Wells Fargo credit cards. "
-                "Returns detailed structured data including:\n"
+                "**PURPOSE**\n"
+                "Retrieves comprehensive rates and fees information for specified credit cards. Returns detailed structured data including:\n"
                 "- Product information (terms and conditions, intro bonus eligibility)\n"
-                "- Interest Rates and Charges:\n"
-                "  * APR for Purchases (intro rate, post-intro rate, rate basis)\n"
-                "  * APR for Balance Transfers (intro rate, post-intro rate, eligibility requirements)\n"
-                "  * APR for Cash Advances and Overdraft Protection\n"
-                "  * How to avoid paying interest on purchases\n"
-                "  * Minimum interest charge\n"
-                "- Fees:\n"
-                "  * Annual Fee\n"
-                "  * Transaction Fees (balance transfers, cash advances, foreign transactions)\n"
-                "  * Penalty Fees (late payment)\n\n"
-                "Use this when you need to compare pricing, understand costs, or get complete terms and conditions for cards. "
-                "Accepts an array of card names. Each card name must be one of: Active Cash, Attune, Autograph, "
-                "Autograph Journey, Choice Privileges Mastercard, Choice Privileges Select Mastercard, "
-                "One Key Card, One Key+ Card, or Reflect. "
-                "Examples: ['Active Cash'], ['Autograph', 'Reflect'], or ['Active Cash', 'One Key+ Card']"
+                "- Interest Rates and Charges (APR for Purchases/Balance Transfers/Cash Advances, interest details, minimum charges)\n"
+                "- Fees (Annual Fee, Transaction Fees for balance transfers/cash advances/foreign transactions, Penalty Fees)\n"
+                "\n"
+                "**WHEN TO USE**\n"
+                "Call this tool when user asks to:\n"
+                "- Compare cards or compare specific cards by name\n"
+                "- Understand which card is better or what the differences are\n"
+                "- Get a suggestion or recommendation for a card\n"
+                "- See the best card or best option for their needs\n"
+                "- Choose between different card options\n"
+                "- Find the best card for a specific use case or spending pattern\n"
+                "This tool is the SECOND step (after 'fetch_rewards_and_benefits') before calling 'compare_cards'.\n"
+                "\n"
+                "**SEQUENCING REQUIREMENT**\n"
+                "- Must be called (along with 'fetch_rewards_and_benefits') before using 'compare_cards'\n"
+                "- Always pair with 'fetch_rewards_and_benefits' before displaying comparison\n"
+                "- Do not skip this step when comparing or recommending cards\n"
+                "\n"
+                "**INPUT**: Array of card names. Each must be: Active Cash, Attune, Autograph, Autograph Journey, "
+                "Choice Privileges Mastercard, Choice Privileges Select Mastercard, One Key Card, One Key+ Card, or Reflect.\n"
+                "**EXAMPLES**: ['Active Cash'], ['Autograph', 'Reflect'], or ['Active Cash', 'One Key+ Card']"
             ),
             inputSchema=schemas.get("fetch_rates_and_fees", {
                 "type": "object",
@@ -108,9 +145,63 @@ def get_tool_definitions() -> List[types.Tool]:
                 },
                 "required": ["card_titles"]
             }),
+            annotations=types.ToolAnnotations(
+                title="Fetch Wells Fargo Credit Card Rates and Fees",
+                readOnlyHint=True,  # Only reads data, doesn't modify anything
+                destructiveHint=False,
+                idempotentHint=True,  # Same input always returns same result
+                openWorldHint=False,  # Works with closed dataset of Wells Fargo cards
+            )
         )
     )
     logger.info("✅ Registered non-widget tool: fetch_rates_and_fees")
+    
+    # get_all_credit_cards tool - returns all cards as plain data without UI
+    tools.append(
+        types.Tool(
+            name="get_all_credit_cards",
+            title="Get All Wells Fargo Credit Cards",
+            description=(
+                "**PURPOSE**\n"
+                "Retrieves all Wells Fargo credit cards as structured data without displaying any UI widgets. "
+                "Returns comprehensive card information including title, subtitle, category, features, intro offers, "
+                "rewards, annual fees, and more.\n"
+                "\n"
+                "**WHEN TO USE**\n"
+                "Use this tool when you need:\n"
+                "- Raw credit card data for analysis or processing\n"
+                "- Card information without triggering UI display\n"
+                "- To programmatically access card details\n"
+                "- To build custom responses or summaries about cards\n"
+                "- Complete unfiltered list of all available cards\n"
+                "\n"
+                "**DIFFERENCE FROM list_wells_fargo_credit_cards**\n"
+                "- list_wells_fargo_credit_cards: Returns data AND displays UI widget\n"
+                "- get_all_credit_cards: Returns ONLY data, NO UI widget\n"
+                "\n"
+                "**NO FILTERS**\n"
+                "- Always returns ALL cards without any filtering\n"
+                "- No category filter\n"
+                "- No annual fee filter\n"
+                "\n"
+                "**INPUT**: None required\n"
+                "**OUTPUT**: Array of all card objects with complete card details"
+            ),
+            inputSchema=schemas.get("get_all_credit_cards", {
+                "type": "object",
+                "properties": {},
+                "required": []
+            }),
+            annotations=types.ToolAnnotations(
+                title="Get All Wells Fargo Credit Cards",
+                readOnlyHint=True,  # Only reads data, doesn't modify anything
+                destructiveHint=False,
+                idempotentHint=True,  # Same input always returns same result
+                openWorldHint=False,  # Works with closed dataset of Wells Fargo cards
+            )
+        )
+    )
+    logger.info("✅ Registered non-widget tool: get_all_credit_cards")
     
     logger.info(f"📋 Total tools registered: {len(tools)}")
     return tools
@@ -133,14 +224,16 @@ async def handle_tool_call(req: types.CallToolRequest) -> types.ServerResult:
     logger.debug(f"   Arguments: {arguments}")
     
     # Route to appropriate handler
-    if tool_name == "list_cards":
-        return await _handle_list_cards(arguments)
-    elif tool_name == "compare_cards":
+    if tool_name == "list_wells_fargo_credit_cards":
+        return await _handle_list_wells_fargo_credit_cards(arguments)
+    elif tool_name == "compare_credit_cards":
         return await _handle_compare_cards(arguments)
-    elif tool_name == "fetch_reward_benefits":
-        return await _handle_fetch_reward_benefits(arguments)
+    elif tool_name == "fetch_rewards_and_benefits":
+        return await _handle_fetch_rewards_and_benefits(arguments)
     elif tool_name == "fetch_rates_and_fees":
         return await _handle_fetch_rates_and_fees(arguments)
+    elif tool_name == "get_all_credit_cards":
+        return await _handle_get_all_credit_cards(arguments)
     else:
         error_msg = f"Unknown tool: {tool_name}"
         logger.error(f"❌ {error_msg}")
@@ -155,9 +248,9 @@ async def handle_tool_call(req: types.CallToolRequest) -> types.ServerResult:
         )
 
 
-async def _handle_list_cards(arguments: Dict[str, Any]) -> types.ServerResult:
-    """Handle list_cards tool call with optional category and annual fee filters."""
-    logger.info("💳 Handling list_cards request")
+async def _handle_list_wells_fargo_credit_cards(arguments: Dict[str, Any]) -> types.ServerResult:
+    """Handle list_wells_fargo_credit_cards tool call with optional category and annual fee filters."""
+    logger.info("💳 Handling list_wells_fargo_credit_cards request")
     
     # Get category from arguments if provided
     category = None
@@ -281,9 +374,9 @@ async def _handle_compare_cards(arguments: Dict[str, Any]) -> types.ServerResult
         )
 
 
-async def _handle_fetch_reward_benefits(arguments: Dict[str, Any]) -> types.ServerResult:
-    """Handle fetch_reward_benefits tool call."""
-    logger.info("🎁 Handling fetch_reward_benefits request")
+async def _handle_fetch_rewards_and_benefits(arguments: Dict[str, Any]) -> types.ServerResult:
+    """Handle fetch_rewards_and_benefits tool call."""
+    logger.info("🎁 Handling fetch_rewards_and_benefits request")
     
     card_titles = arguments.get("card_titles")
     if not card_titles:
@@ -347,7 +440,7 @@ async def _handle_fetch_reward_benefits(arguments: Dict[str, Any]) -> types.Serv
                 )
             )
     except Exception as e:
-        logger.error(f"❌ Error in fetch_reward_benefits: {str(e)}")
+        logger.error(f"❌ Error in fetch_rewards_and_benefits: {str(e)}")
         return types.ServerResult(
             types.CallToolResult(
                 content=[types.TextContent(
@@ -435,6 +528,48 @@ async def _handle_fetch_rates_and_fees(arguments: Dict[str, Any]) -> types.Serve
                 isError=True,
             )
         )
+
+
+async def _handle_get_all_credit_cards(arguments: Dict[str, Any]) -> types.ServerResult:
+    """Handle get_all_credit_cards tool call - returns all cards without any filters or UI widget."""
+    logger.info("📋 Handling get_all_credit_cards request (no filters, no UI widget)")
+    
+    try:
+        # Pass None for both category and no_annual_fee to get ALL cards without any filtering
+        cards = list_cards(None, None)
+        
+        logger.info(f"✅ Retrieved all {len(cards)} credit cards successfully (no filters applied)")
+        
+        # Return data WITHOUT structuredContent to avoid triggering UI widget
+        result = types.ServerResult(
+            types.CallToolResult(
+                content=[types.TextContent(
+                    type="text",
+                    text=json.dumps({
+                        "message": f"Successfully retrieved all {len(cards)} Wells Fargo credit cards.",
+                        "count": len(cards),
+                        "cards": cards
+                    }, indent=2)
+                )],
+            )
+        )
+        
+        logger.info("📦 Returning CallToolResult WITHOUT structuredContent (no UI widget)")
+        logger.debug(f"   Card count: {len(cards)}")
+        
+        return result
+    except Exception as e:
+        logger.error(f"❌ Error retrieving cards: {str(e)}")
+        return types.ServerResult(
+            types.CallToolResult(
+                content=[types.TextContent(
+                    type="text",
+                    text=f"Error retrieving credit cards: {str(e)}"
+                )],
+                isError=True,
+            )
+        )
+
 
 if __name__ == '__main__':
     cards = list_cards()

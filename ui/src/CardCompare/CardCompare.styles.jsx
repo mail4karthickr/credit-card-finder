@@ -3,8 +3,8 @@ import styled, { keyframes } from 'styled-components';
 export const CompareContainer = styled.div`
   width: 100%;
   min-height: 100vh;
-  background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
-  padding: 32px 24px;
+  background: transparent;
+  padding: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -13,30 +13,49 @@ export const CompareContainer = styled.div`
 `;
 
 export const CompareHeader = styled.div`
-  text-align: center;
-  margin-bottom: 40px;
+  display: none;
 `;
 
 export const CompareTitle = styled.h1`
-  color: white;
-  font-size: 36px;
-  font-weight: 700;
-  margin: 0;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: none;
 `;
 
 export const TableContainer = styled.div`
-  max-width: 1400px;
+  max-width: 1600px;
   margin: 0 auto;
   background: white;
   border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+  overflow-x: auto;
+  overflow-y: visible;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  position: relative;
+  
+  /* Custom scrollbar styling */
+  &::-webkit-scrollbar {
+    height: 10px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 0 0 16px 16px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: #D71E28;
+    border-radius: 5px;
+  }
+  
+  &::-webkit-scrollbar-thumb:hover {
+    background: #b01820;
+  }
 `;
 
 export const ComparisonTable = styled.table`
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
+  position: relative;
+  z-index: 2;
   
   @media (max-width: 768px) {
     display: block;
@@ -53,21 +72,40 @@ export const TableHeaderRow = styled.tr`
 `;
 
 export const TableHeaderCell = styled.th`
-  padding: 12px 12px;
+  padding: 16px 12px;
   text-align: center;
   color: white;
   font-weight: 600;
-  font-size: 11px;
+  font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   vertical-align: middle;
+  min-width: 140px;
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+  background: #D71E28;
+  
+  &:last-child {
+    border-right: none;
+  }
   
   &:first-child {
-    text-align: left;
+    text-align: center;
     font-size: 14px;
-    width: 180px;
-    min-width: 180px;
+    width: 140px;
+    min-width: 140px;
+    position: sticky;
+    left: 0;
+    z-index: 50;
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    background: #D71E28;
   }
+
+  ${props => props.isAnnualFee && `
+    min-width: 80px;
+    width: 80px;
+    max-width: 80px;
+  `}
 
   ${props => props.isRecommended && `
     background: #D71E28;
@@ -89,25 +127,26 @@ export const CardHeaderContent = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
+  justify-content: center;
 `;
 
 export const CardImage = styled.img`
-  width: 60px;
+  width: 100px;
   height: auto;
-  border-radius: 4px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   background: white;
-  padding: 2px;
+  padding: 4px;
 `;
 
 export const CardName = styled.div`
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
-  color: white;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-  line-height: 1.2;
-  max-width: 140px;
+  color: #1a237e;
+  text-align: center;
+  line-height: 1.3;
+  max-width: 120px;
 `;
 
 export const TableBody = styled.tbody``;
@@ -123,49 +162,117 @@ export const TableRow = styled.tr`
   &:last-child {
     border-bottom: none;
   }
+
+  ${props => props.isRecommended && `
+    background-color: #fff5f5;
+    border-left: 4px solid #D71E28;
+    
+    &:hover {
+      background-color: #ffebeb;
+    }
+    
+    td:first-child {
+      background-color: #fff5f5 !important;
+    }
+  `}
 `;
 
 export const BenefitCell = styled.td`
-  padding: 14px 12px;
-  vertical-align: top;
+  padding: 20px 16px;
+  vertical-align: middle;
+  border-right: 1px solid #e5e7eb;
+  background: white;
+  transition: background-color 0.2s ease;
+  
+  &:last-child {
+    border-right: none;
+  }
   
   &:first-child {
     font-weight: 600;
-    color: #D71E28;
-    font-size: 12px;
-    background-color: #fef2f2;
-    border-right: 2px solid #e5e7eb;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    width: 180px;
-    min-width: 180px;
+    color: #1a237e;
+    font-size: 14px;
+    background-color: #f8f9fa;
+    border-right: 1px solid #e5e7eb;
+    width: 140px;
+    min-width: 140px;
+    position: sticky;
+    left: 0;
+    z-index: 40;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
   }
 `;
 
 export const ValueCell = styled.td`
-  padding: 14px 12px;
-  vertical-align: top;
+  padding: 20px 14px;
+  vertical-align: middle;
   font-size: 13px;
   color: #374151;
   line-height: 1.5;
   text-align: left;
+  min-width: 140px;
+  border-right: 1px solid #e5e7eb;
+  background: white;
+  
+  &:last-child {
+    border-right: none;
+  }
+  
+  ${props => props.isAnnualFee && `
+    min-width: 80px;
+    width: 80px;
+    max-width: 80px;
+    text-align: center;
+  `}
   
   ${props => props.isRecommended && `
-    background-color: rgba(215, 30, 40, 0.05);
     font-weight: 500;
+    background-color: #fff5f5;
   `}
 `;
 
 export const RecommendedBadge = styled.div`
   background: #D71E28;
   color: white;
-  padding: 6px 12px;
-  border-radius: 16px;
-  font-size: 12px;
-  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 10px;
+  font-size: 9px;
+  font-weight: 700;
   display: inline-block;
-  margin-bottom: 8px;
-  box-shadow: 0 4px 12px rgba(215, 30, 40, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  box-shadow: 0 2px 6px rgba(215, 30, 40, 0.3);
+  white-space: nowrap;
+  margin-top: 4px;
+`;
+
+export const ApplyButton = styled.button`
+  background: #D71E28;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(215, 30, 40, 0.4);
+  margin-top: 8px;
+  width: 100%;
+  max-width: 140px;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(215, 30, 40, 0.5);
+    background: #b71c1c;
+  }
+  
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(215, 30, 40, 0.4);
+  }
 `;
 
 export const RecommendedSection = styled.div`
@@ -219,8 +326,8 @@ const spin = keyframes`
 export const LoadingSpinner = styled.div`
   text-align: center;
   padding: 60px 24px;
-  color: white;
-  font-size: 20px;
+  color: #374151;
+  font-size: 18px;
   font-weight: 500;
 
   &::before {
@@ -229,11 +336,88 @@ export const LoadingSpinner = styled.div`
     width: 50px;
     height: 50px;
     margin: 0 auto 20px;
-    border: 4px solid rgba(255, 255, 255, 0.3);
-    border-top-color: white;
+    border: 4px solid rgba(215, 30, 40, 0.2);
+    border-top-color: #D71E28;
     border-radius: 50%;
     animation: ${spin} 1s linear infinite;
   }
+`;
+
+// Shimmer loading skeleton components
+const shimmer = keyframes`
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+`;
+
+export const ShimmerTable = styled.div`
+  width: 100%;
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+`;
+
+export const ShimmerHeader = styled.div`
+  display: flex;
+  background: #f8f9fa;
+  padding: 16px;
+  gap: 12px;
+`;
+
+export const ShimmerHeaderCell = styled.div`
+  background: linear-gradient(
+    90deg,
+    #f0f0f0 0%,
+    #e0e0e0 20%,
+    #f0f0f0 40%,
+    #f0f0f0 100%
+  );
+  background-size: 1000px 100%;
+  animation: ${shimmer} 2s infinite linear;
+  height: 80px;
+  border-radius: 8px;
+  
+  &:first-child {
+    width: 140px;
+    flex-shrink: 0;
+  }
+  
+  flex: 1;
+  min-width: 140px;
+`;
+
+export const ShimmerRow = styled.div`
+  display: flex;
+  padding: 20px 16px;
+  border-bottom: 1px solid #e5e7eb;
+  gap: 12px;
+  align-items: center;
+`;
+
+export const ShimmerCell = styled.div`
+  background: linear-gradient(
+    90deg,
+    #f0f0f0 0%,
+    #e0e0e0 20%,
+    #f0f0f0 40%,
+    #f0f0f0 100%
+  );
+  background-size: 1000px 100%;
+  animation: ${shimmer} 2s infinite linear;
+  height: 60px;
+  border-radius: 6px;
+  
+  &:first-child {
+    width: 140px;
+    flex-shrink: 0;
+  }
+  
+  flex: 1;
+  min-width: 140px;
 `;
 
 // Remove unused exports

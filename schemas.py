@@ -178,8 +178,8 @@ class CompareCardsOutput(BaseModel):
 def get_schemas() -> Dict[str, Dict[str, Any]]:
     """Get all tool input schemas as JSON."""
     return {
-        "list_cards": ListCardsInput.model_json_schema(),
-        "fetch_reward_benefits": FetchRewardBenefitsInput.model_json_schema(),
-        "fetch_rates_and_fees": FetchRatesAndFeesInput.model_json_schema(),
-        "compare_cards": CompareCardsOutput.model_json_schema()
+        "list_wells_fargo_credit_cards": ListCardsInput.model_json_schema(),
+        "fetch_wells_fargo_rewards_and_benefits": FetchRewardBenefitsInput.model_json_schema(),
+        "fetch_wells_fargo_rates_and_fees": FetchRatesAndFeesInput.model_json_schema(),
+        "compare_credit_cards": CompareCardsOutput.model_json_schema()
     }

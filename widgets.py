@@ -135,13 +135,13 @@ def _resource_description(widget: CreditCardWidget) -> str:
 logger.info("📦 Creating widget configurations...")
 widgets: List[CreditCardWidget] = [
     CreditCardWidget(
-        identifier="list_cards",
-        title="Credit Card List",
+        identifier="list_wells_fargo_credit_cards",
+        title="Wells Fargo Credit Card List",
         description=(
             "Display a list of Wells Fargo credit cards with their features, images, and benefits. "
-            "Shows card images, names, categories (Cash Back, Travel, Low Rate, Rewards), "
+            "Shows Wells Fargo card images, names, categories (Cash Back, Travel, Low Rate, Rewards), "
             "annual fees, introductory offers, rewards rates, and key features. "
-            "Use for 'show cards', 'list credit cards', or 'available cards' queries."
+            "Use for 'show Wells Fargo cards', 'list Wells Fargo credit cards', or 'available Wells Fargo cards' queries."
         ),
         template_uri="ui://widget/card-list.html",
         invoking="Loading credit cards...",
@@ -150,34 +150,57 @@ widgets: List[CreditCardWidget] = [
         root_id="card-list-root",
         response_text=(
             "Displayed Wells Fargo credit card options with the following details for each card:\n"
-            "- Card name and high-quality product image\n"
+            "- Wells Fargo card name and high-quality product image\n"
             "- Category badge (Cash Back, Travel, Low Intro Rate, or Rewards)\n"
             "- Annual fee (displayed prominently: $0, $95, or $99)\n"
             "- Intro offer details (sign-up bonus or intro APR)\n"
             "- Rewards structure (cash back rates, points earning, or special benefits)\n"
             "- Quick-view highlights of key features\n"
-            "Cards are organized by category and displayed in an interactive, user-friendly grid layout."
+            "Wells Fargo cards are organized by category and displayed in an interactive, user-friendly grid layout."
         )
     ),
     CreditCardWidget(
-        identifier="compare_cards",
-        title="Credit Card Comparison",
+        identifier="compare_credit_cards",
+        title="Compare Wells Fargo Credit Cards",
         description=(
-            "Display a comparison table of credit cards in the UI after analysis. "
-            "IMPORTANT WORKFLOW: Before using this tool, you MUST first call 'fetch_reward_benefits' "
-            "for each card being compared to gather detailed benefit data. Then analyze and compare the cards yourself. "
-            "This tool is ONLY for displaying the final comparison in UI format. "
-            f"REQUIRED FORMAT: Must provide data matching this exact structure:\n{COMPARE_CARDS_EXAMPLE}\n"
-            "Each benefit_row must compare the same feature across all cards. Common benefits include: "
+            "**MANDATORY TOOL FOR CARD COMPARISONS AND RECOMMENDATIONS** - Display detailed credit card comparison in formatted UI table to help users choose the best card. "
+            "\n\n"
+            "**WHEN TO USE THIS TOOL** (ALL scenarios require this tool):\n"
+            "1. Explicit comparison requests: 'Compare Card A and Card B', 'Show differences between cards'\n"
+            "2. Recommendation questions: 'Which card should I choose?', 'Which one to buy?', 'What's the best card?'\n"
+            "3. Decision-making queries: 'Which is better?', 'Recommend a card', 'Suggest the best card', 'Good card for me'\n"
+            "4. Selection help: 'Help me decide', 'Best option', 'Top card', 'Which one is right for me?'\n"
+            "\n"
+            "**CRITICAL REQUIREMENT**: When users need to choose between cards or want recommendations, you MUST use this tool "
+            "to display a detailed comparison table. DO NOT provide text-based comparisons or recommendations in the chat. "
+            "This tool shows side-by-side details so users can make informed decisions themselves.\n"
+            "\n"
+            "**WORKFLOW (3 STEPS - ALL MANDATORY)**:\n"
+            "1. Call 'fetch_rewards_and_benefits' with card names to get detailed benefit data\n"
+            "2. Call 'fetch_rates_and_fees' with same card names to get rates and fee data\n"
+            "3. Analyze the data, then call THIS tool to display the formatted comparison table with your recommendation\n"
+            "\n"
+            "**WHY THIS TOOL IS MANDATORY**:\n"
+            "- Shows detailed side-by-side comparison in clean, formatted table\n"
+            "- Helps users visually compare features and make their own choice\n"
+            "- Automatically organizes data in easy-to-scan rows and columns\n"
+            "- Much better user experience than text-based comparisons\n"
+            "- Includes your recommendation with reasoning to guide user decision\n"
+            "\n"
+            f"**REQUIRED FORMAT**: Must provide data matching this exact structure:\n{COMPARE_CARDS_EXAMPLE}\n"
+            "\n"
+            "**BENEFIT ROWS**: Each benefit_row must compare the same feature across all cards. Common benefits include: "
             "'Intro offer', 'Annual fee', 'Rewards rate', 'Intro APR', 'Best for', 'Cell phone protection'. "
-            "Use this tool only after completing analysis to show the comparison table to users."
+            "\n\n"
+            "**IMPORTANT**: Always include 'recommended_card' with card_name and reason to help users choose. "
+            "This tool is NOT just for comparing - it's for helping users make informed decisions by showing detailed comparisons!"
         ),
         template_uri="ui://widget/card-compare.html",
-        invoking="Comparing credit cards...",
-        invoked="Card comparison ready",
+        invoking="Loading comparison...",
+        invoked="Comparison ready",
         bundle_name="card-compare",
         root_id="card-compare-root",
-        response_text="Displayed credit card comparison"
+        response_text="Displayed credit card comparison table"
     ),
 ]
 

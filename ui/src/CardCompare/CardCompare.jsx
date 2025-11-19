@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import { useToolOutput } from '../hooks.js';
+import ApplyModal from '../CardList/ApplyModal.jsx';
 import {
   CompareContainer,
   CompareHeader,
@@ -17,8 +18,15 @@ import {
   TableRow,
   BenefitCell,
   ValueCell,
+  RecommendedBadge,
+  ApplyButton,
   ErrorMessage,
-  LoadingSpinner
+  LoadingSpinner,
+  ShimmerTable,
+  ShimmerHeader,
+  ShimmerHeaderCell,
+  ShimmerRow,
+  ShimmerCell,
 } from './CardCompare.styles.jsx';
 
 // Import card images
@@ -63,14 +71,48 @@ const getCardImage = (cardName) => {
 const CardCompareComponent = () => {
   console.log('🎨 [CardCompare] Component rendering');
   
+  const [showApplyModal, setShowApplyModal] = useState(false);
+  const [selectedCard, setSelectedCard] = useState(null);
+  
   const toolOutput = useToolOutput();
   console.log('📤 [CardCompare] Tool output:', toolOutput);
 
+  const handleApplyClick = (cardName) => {
+    console.log('🔘 [CardCompare] Apply button clicked for:', cardName);
+    const imageUrl = getCardImage(cardName);
+    setSelectedCard({
+      title: cardName,
+      imageUrl: imageUrl
+    });
+    setShowApplyModal(true);
+  };
+
+  const handleCloseModal = () => {
+    console.log('❌ [CardCompare] Closing apply modal');
+    setShowApplyModal(false);
+    setSelectedCard(null);
+  };
+
   if (!toolOutput) {
-    console.log('⏳ [CardCompare] No tool output, showing loading spinner');
+    console.log('⏳ [CardCompare] No tool output, showing shimmer skeleton');
     return (
       <CompareContainer>
-        <LoadingSpinner>Loading comparison...</LoadingSpinner>
+        <ShimmerTable>
+          <ShimmerHeader>
+            <ShimmerHeaderCell />
+            <ShimmerHeaderCell />
+            <ShimmerHeaderCell />
+            <ShimmerHeaderCell />
+          </ShimmerHeader>
+          {[1, 2, 3].map((i) => (
+            <ShimmerRow key={i}>
+              <ShimmerCell />
+              <ShimmerCell />
+              <ShimmerCell />
+              <ShimmerCell />
+            </ShimmerRow>
+          ))}
+        </ShimmerTable>
       </CompareContainer>
     );
   }
@@ -98,17 +140,12 @@ const CardCompareComponent = () => {
         <ComparisonTable>
           <TableHeader>
             <TableHeaderRow>
-              <TableHeaderCell>Benefits</TableHeaderCell>
-              {cards.map((cardName, index) => {
-                const isRecommended = recommended_card?.card_name === cardName;
-                const imageUrl = getCardImage(cardName);
-                
+              <TableHeaderCell>Card</TableHeaderCell>
+              {benefit_rows.map((row, index) => {
+                const isAnnualFee = row.benefit_name.toLowerCase().includes('annual fee');
                 return (
-                  <TableHeaderCell key={index} isRecommended={isRecommended}>
-                    <CardHeaderContent>
-                      <CardImage src={imageUrl} alt={cardName} />
-                      <CardName>{cardName}</CardName>
-                    </CardHeaderContent>
+                  <TableHeaderCell key={index} isAnnualFee={isAnnualFee}>
+                    {row.benefit_name}
                   </TableHeaderCell>
                 );
               })}
@@ -116,22 +153,44 @@ const CardCompareComponent = () => {
           </TableHeader>
           
           <TableBody>
-            {benefit_rows.map((row, rowIndex) => (
-              <TableRow key={rowIndex}>
-                <BenefitCell>{row.benefit_name}</BenefitCell>
-                {cards.map((cardName, cardIndex) => {
-                  const isRecommended = recommended_card?.card_name === cardName;
-                  return (
-                    <ValueCell key={cardIndex} isRecommended={isRecommended}>
-                      {row.card_values[cardName] || 'N/A'}
-                    </ValueCell>
-                  );
-                })}
-              </TableRow>
-            ))}
+            {cards.map((cardName, cardIndex) => {
+              const isRecommended = recommended_card?.card_name === cardName;
+              const imageUrl = getCardImage(cardName);
+              
+              return (
+                <TableRow key={cardIndex} isRecommended={isRecommended}>
+                  <BenefitCell>
+                    <CardHeaderContent>
+                      <CardImage src={imageUrl} alt={cardName} />
+                      <CardName>{cardName}</CardName>
+                      {isRecommended && (
+                        <>
+                          <RecommendedBadge>⭐ Recommended</RecommendedBadge>
+                          <ApplyButton onClick={() => handleApplyClick(cardName)}>
+                            Apply Now
+                          </ApplyButton>
+                        </>
+                      )}
+                    </CardHeaderContent>
+                  </BenefitCell>
+                  {benefit_rows.map((row, rowIndex) => {
+                    const isAnnualFee = row.benefit_name.toLowerCase().includes('annual fee');
+                    return (
+                      <ValueCell key={rowIndex} isRecommended={isRecommended} isAnnualFee={isAnnualFee}>
+                        {row.card_values[cardName] || 'N/A'}
+                      </ValueCell>
+                    );
+                  })}
+                </TableRow>
+              );
+            })}
           </TableBody>
         </ComparisonTable>
       </TableContainer>
+      
+      {showApplyModal && selectedCard && (
+        <ApplyModal card={selectedCard} onClose={handleCloseModal} />
+      )}
     </CompareContainer>
   );
 };

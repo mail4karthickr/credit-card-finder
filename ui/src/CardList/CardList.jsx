@@ -113,7 +113,7 @@ const CardListComponent = () => {
     setLoadingDetails(prev => ({ ...prev, [index]: true }));
     
     // Use ngrok URL for API calls
-    const API_BASE_URL = 'https://7b2a83a3a3da.ngrok-free.app';
+    const API_BASE_URL = 'https://075afded9b12.ngrok-free.app';
     
     try {
       // Fetch both reward benefits and rates & fees in parallel

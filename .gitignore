@@ -4,30 +4,20 @@ __pycache__/
 *$py.class
 *.so
 .Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
 venv/
 env/
 ENV/
+.venv
+*.egg-info/
+dist/
+build/
+*.egg
 
-# Environment variables
-.env
-.env.local
-.env.*.local
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
 # IDEs
 .vscode/
@@ -35,37 +25,23 @@ ENV/
 *.swp
 *.swo
 *~
+
+# OS
 .DS_Store
+Thumbs.db
 
-# Node.js / React
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
-
-# UI build artifacts (keep dist/ for MCP widget bundles)
-# Uncomment if you want to exclude built bundles:
-# ui/dist/
-
-# Testing
-.coverage
-.pytest_cache/
-htmlcov/
+# Environment variables
+.env
+.env.local
 
 # Logs
 *.log
+logs/
 
-# MacOS
-.DS_Store
-.AppleDouble
-.LSOverride
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
 
-# Temporary files
-*.tmp
-*.temp
-test_*.json
-
-# Credit card finder specific
-credit_card_finder/
-credit_card_finder.egg-info/
+# Build outputs
+ui/dist/

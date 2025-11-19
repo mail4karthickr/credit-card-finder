@@ -1,0 +1,33 @@
+{
+  "success": true,
+  "data": {
+    "Active Cash\u00ae": {
+      "url": "https://web.secure.wellsfargo.com/credit-cards/products/details?subproduct_code=AC",
+      "status_code": 200,
+      "content_type": "text/html;charset=UTF-8",
+      "content_length": 11444,
+      "is_html": true,
+      "preview": "<!DOCTYPE html>\n<html>\n<head>\n    \n\n    \n        <script type=\"text/javascript\" nonce=\"df013721-7a75-4743-af4f-8c7092d18bb7\">\n            var environment = \"PRODUCTION\";\n\n            \n            var appd_key = \"AD-AAB-ABJ-PYZ\";\n             \n\n             \n            var appd_js_path = \"https:\\/\\/static.wellsfargo.com\\/assets\\/js\\/wfui\\/appdynamics\";\n            var wfacookie = \"1120251114170533934698244\";\n            var customerSegment = null;\n        </script>\n        <script type=\"text/jav"
+    },
+    "Autograph\u00ae": {
+      "url": "https://web.secure.wellsfargo.com/credit-cards/products/details?subproduct_code=AU",
+      "status_code": 200,
+      "content_type": "text/html;charset=UTF-8",
+      "content_length": 11446,
+      "is_html": true,
+      "preview": "<!DOCTYPE html>\n<html>\n<head>\n    \n\n    \n        <script type=\"text/javascript\" nonce=\"f8317695-4ba9-4c81-9dd5-69e32cda49dd\">\n            var environment = \"PRODUCTION\";\n\n            \n            var appd_key = \"AD-AAB-ABJ-PYZ\";\n             \n\n             \n            var appd_js_path = \"https:\\/\\/static.wellsfargo.com\\/assets\\/js\\/wfui\\/appdynamics\";\n            var wfacookie = \"11202511141705341157560834\";\n            var customerSegment = null;\n        </script>\n        <script type=\"text/ja"
+    },
+    "Reflect\u00ae": {
+      "url": "https://web.secure.wellsfargo.com/credit-cards/products/details?subproduct_code=VV",
+      "status_code": 200,
+      "content_type": "text/html;charset=UTF-8",
+      "content_length": 11444,
+      "is_html": true,
+      "preview": "<!DOCTYPE html>\n<html>\n<head>\n    \n\n    \n        <script type=\"text/javascript\" nonce=\"c08e0422-2e21-4ba5-8bb5-fb9ab54e1d19\">\n            var environment = \"PRODUCTION\";\n\n            \n            var appd_key = \"AD-AAB-ABJ-PYZ\";\n             \n\n             \n            var appd_js_path = \"https:\\/\\/static.wellsfargo.com\\/assets\\/js\\/wfui\\/appdynamics\";\n            var wfacookie = \"1120251114170535532412519\";\n            var customerSegment = null;\n        </script>\n        <script type=\"text/jav"
+    }
+  },
+  "errors": null,
+  "count": 3,
+  "successful": 3,
+  "failed": 0
+}
