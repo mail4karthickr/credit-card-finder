@@ -43,6 +43,12 @@ This is a Wells Fargo Credit Card Finder MCP Server with React UI widgets for ca
 - Card images are bundled with esbuild dataurl loader
 - Colors use Wells Fargo red (#D71E28) and navy blue theme
 
+### Docker Deployment
+- **CRITICAL**: Docker images must be built with `--platform linux/amd64`
+- Command: `docker build --platform linux/amd64 -t <image-name> .`
+- This ensures compatibility with standard x86_64 servers and cloud platforms
+- Without this flag, images built on ARM Macs will fail with "invalid platform" errors
+
 ## Response Style
 - Provide concise, actionable responses
 - Focus on the specific task requested
